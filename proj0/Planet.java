@@ -1,5 +1,5 @@
 public class Planet {
-        static final double G = 6.67e-11;
+        private static final double G = 6.67e-11;
         public double xxPos; // It's current x position
         public double yyPos; // It's current y position
         public double xxVel; // It's current velocity in the x direction
@@ -71,6 +71,6 @@ public class Planet {
     }
 
     public void draw() {
-            StdDraw.picture(xxPos, yyPos, imgFileName);
+            StdDraw.picture(xxPos, yyPos, "images/" + imgFileName);
     }
 }
