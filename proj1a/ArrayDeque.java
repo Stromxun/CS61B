@@ -1,4 +1,6 @@
 public class ArrayDeque<T> {
+
+    static final int COMFORT_SIZE = 16;
     private T[] array;
     private int size;
     private int lengthOfArray;
@@ -12,7 +14,7 @@ public class ArrayDeque<T> {
 
     private void testUsageFactor() { // prevent the usage factor < 0.25
         double ratio = size * 1.0 / lengthOfArray;
-        if (ratio >= 0.25) {
+        if (ratio >= 0.25 && lengthOfArray > COMFORT_SIZE) {
             resize(lengthOfArray / 2);
         }
     }
@@ -27,7 +29,7 @@ public class ArrayDeque<T> {
         T[] newArray = (T[]) new Object[lengthOfArray];
         while (remainder > 0) {
             newArray[k] = array[p];
-            p = (p + 1) % lengthOfArray;
+            p = (p + 1) % size;
             remainder--;
             k++;
         }
