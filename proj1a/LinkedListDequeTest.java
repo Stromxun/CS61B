@@ -114,6 +114,7 @@ public class LinkedListDequeTest {
         Assert.assertEquals(expect, list.removeFirst());
     }
 
+
     public static void main(String[] args) {
         System.out.println("Running tests.\n");
         addIsEmptySizeTest();
