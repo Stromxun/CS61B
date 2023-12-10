@@ -1,6 +1,6 @@
 public class LinkedListDeque<T> {
 
-    static class Node<T> {
+    private static class Node<T> {
         T item;
         Node<T> prev;
         Node<T> next;
@@ -18,8 +18,8 @@ public class LinkedListDeque<T> {
         }
     }
 
-    int size;
-    Node<T> first, last;
+    private int size;
+    private Node<T> first, last;
 
     public LinkedListDeque() {
         this.first = null;
@@ -48,10 +48,10 @@ public class LinkedListDeque<T> {
             return;
         }
 
-        Node<T> tmp = first;
-        first = new Node<>(item);
-        tmp.next = first;
-        first.prev = tmp;
+        Node<T> tmp = last;
+        last = new Node<>(item);
+        tmp.next = last;
+        last.prev = tmp;
     }
 
     public boolean isEmpty() {

@@ -1,8 +1,8 @@
 public class ArrayDeque<T> {
-    T[] array;
-    int size;
-    int lengthOfArray;
-    int first, last;
+    private T[] array;
+    private int size;
+    private int lengthOfArray;
+    private int first, last;
     public ArrayDeque() {
         lengthOfArray = 8;
         array = (T[]) new Object[lengthOfArray];
