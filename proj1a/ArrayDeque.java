@@ -88,8 +88,8 @@ public class ArrayDeque<T> {
             return null;
         }
         size--;
-        T item = array[first];
         last = (last + lengthOfArray - 1) % lengthOfArray;
+        T item = array[last];
         testUsageFactor();
         return item;
     }

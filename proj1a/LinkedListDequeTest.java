@@ -114,6 +114,17 @@ public class LinkedListDequeTest {
         Assert.assertEquals(expect, list.removeFirst());
     }
 
+    @Test
+    public void test() {
+        ArrayDeque<Integer> list = new ArrayDeque<>();
+        list.addFirst(0);
+        list.isEmpty();
+        list.addFirst(2);
+        list.addFirst(3);
+
+        Integer expect = 0;
+        Assert.assertEquals(expect, list.removeLast());
+    }
 
     public static void main(String[] args) {
         System.out.println("Running tests.\n");
