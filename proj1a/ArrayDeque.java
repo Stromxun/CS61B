@@ -10,18 +10,20 @@ public class ArrayDeque<T> {
         last = 0;
     }
 
-    private boolean testUsageFactor() { // prevent the usage factor < 0.25
+    private void testUsageFactor() { // prevent the usage factor < 0.25
         double ratio = size * 1.0 / lengthOfArray;
-        return ratio >= 0.25;
+        if (ratio >= 0.25) {
+            resize(lengthOfArray / 2);
+        }
     }
 
     private boolean isFull() {
         return size() == lengthOfArray;
     }
 
-    private void resize() {
-        int p = first, k = 0, remainder = lengthOfArray;
-        lengthOfArray = (lengthOfArray * 2);
+    private void resize(int newSize) {
+        int p = first, k = 0, remainder = size();
+        lengthOfArray = newSize;
         T[] newArray = (T[]) new Object[lengthOfArray];
         while (remainder > 0) {
             newArray[k] = array[p];
@@ -37,7 +39,7 @@ public class ArrayDeque<T> {
 
     public void addFirst(T item) {
         if (isFull()) {
-            resize();
+            resize(lengthOfArray * 2);
         }
         first = (first + lengthOfArray - 1) % lengthOfArray;
         array[first] = item;
@@ -46,7 +48,7 @@ public class ArrayDeque<T> {
 
     public void addLast(T item) {
         if (isFull()) {
-            resize();
+            resize(lengthOfArray * 2);
         }
         array[last] = item;
         last = (last + lengthOfArray + 1) % lengthOfArray;
@@ -73,16 +75,20 @@ public class ArrayDeque<T> {
         if (isEmpty()) {
             return null;
         }
+        size--;
         T item = array[first];
         first = (first + lengthOfArray + 1) % lengthOfArray;
+        testUsageFactor();
         return item;
     }
     public T removeLast() {
         if (isEmpty()) {
             return null;
         }
+        size--;
         T item = array[first];
         last = (last + lengthOfArray - 1) % lengthOfArray;
+        testUsageFactor();
         return item;
     }
 

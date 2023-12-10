@@ -82,6 +82,7 @@ public class LinkedListDeque<T> {
             last = null;
         } else {
             first = first.next;
+            first.prev = null;
         }
         return item;
     }
@@ -97,6 +98,7 @@ public class LinkedListDeque<T> {
             last = null;
         } else {
             last = last.prev;
+            last.next = null;
         }
         return item;
     }
