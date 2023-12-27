@@ -4,7 +4,7 @@ ArrayDeque:
 
 Q: Give an example of at least one idea from the staff solution that would have made your solution better (if any).
 
-A: 
+A: Yes
 
 Q: What's something you felt proud of in your code, if anything?
 

@@ -72,7 +72,7 @@ public class IntList {
         return new IntList(L.first * L.first, squareListRecursive(L.rest));
     }
 
-    /** DO NOT MODIFY ANYTHING ABOVE THIS LINE! */
+    /* DO NOT MODIFY ANYTHING ABOVE THIS LINE! */
 
 
     /**

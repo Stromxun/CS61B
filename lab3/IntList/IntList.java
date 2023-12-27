@@ -121,17 +121,21 @@ public class IntList {
      * This method is destructive. If given null
      * as an input, returns null.
      */
+    public void swap(IntList A) {
+        int temp = A.first;
+        A.first = this.first;
+        this.first = temp;
+    }
 
     public static IntList reverse(IntList A) {
-        IntList newList = null;
+        int aSize = A.size();
+        int len = aSize / 2;
         IntList p = A;
-        while (p != null) {
-            IntList tmp = p.rest;
-            p.rest = newList;
-            newList = p;
-            p = tmp;
+        for (int i = 0; i < len; i++) {
+            IntList q = A.findNthElement(aSize - 1 - i);
+            p.swap(q);
+            p = p.rest;
         }
-        A = newList;
         return A;
     }
 
@@ -272,4 +276,3 @@ public class IntList {
         return out.toString();
     }
 }
-
