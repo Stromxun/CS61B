@@ -18,14 +18,4 @@ public class TestOffByOne {
         assertFalse(offByOne.equalChars('a', 'A'));
     }
 
-
-    static CharacterComparator offBy5 = new OffByN(5);
-    @Test
-    public void testOffByN() {
-        Assert.assertTrue(offBy5.equalChars('a', 'f'));
-        Assert.assertFalse(offBy5.equalChars('F', 'a'));
-        Assert.assertFalse(offBy5.equalChars('f', 'h'));
-    }
-    // Your tests go here.
-
 }

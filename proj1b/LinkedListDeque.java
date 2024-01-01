@@ -44,8 +44,7 @@ public class LinkedListDeque<T> implements Deque<T> {
         size++;
         if (last == null) { // when first and tail is null
             first = new Node<>(item);
-            last = first;
-            return;
+            last = first;return;
         }
 
         Node<T> tmp = last;
