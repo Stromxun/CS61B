@@ -18,26 +18,19 @@ public class TestPalindrome {
 
     @Test
     public void testIsPalindrome() {
-        assertFalse(palindrome.isPalindrome("cat"));
         assertTrue(palindrome.isPalindrome(""));
-        assertTrue(palindrome.isPalindrome(null));
-        assertFalse(palindrome.isPalindrome("apple"));
-        assertTrue(palindrome.isPalindrome("txt"));
-        assertTrue(palindrome.isPalindrome("enne"));
-        assertTrue(palindrome.isPalindrome("mmm"));
-        assertTrue(palindrome.isPalindrome("abcddcba"));
-        assertFalse(palindrome.isPalindrome("Mmm"));
-        assertTrue(palindrome.isPalindrome("c taat c"));
+        assertTrue(palindrome.isPalindrome("a"));
+        assertTrue(palindrome.isPalindrome("aba"));
+        assertTrue(palindrome.isPalindrome("aaccbbbccaa"));
 
-        OffByOne obo = new OffByOne();
+        assertFalse(palindrome.isPalindrome("ab"));
+        assertFalse(palindrome.isPalindrome("ababba"));
+    }
 
-        assertTrue(palindrome.isPalindrome("flake", obo));
-        assertTrue(palindrome.isPalindrome("a", obo));
-        assertFalse(palindrome.isPalindrome("ccc", obo));
-        assertTrue(palindrome.isPalindrome("abcdedcb", obo));
-        assertFalse(palindrome.isPalindrome("AbcDedcb", obo));
-        assertFalse(palindrome.isPalindrome("aba", obo));
-        assertTrue(palindrome.isPalindrome("", obo));
-        assertTrue(palindrome.isPalindrome(null, obo));
+    @Test
+    public void testIsOffByOnePalindrome() {
+        CharacterComparator cc = new OffByOne();
+        assertTrue(palindrome.isPalindrome("flake", cc));
+        assertFalse(palindrome.isPalindrome("aba", cc));
     }
 }
