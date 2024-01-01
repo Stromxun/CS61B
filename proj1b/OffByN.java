@@ -1,17 +1,13 @@
 public class OffByN implements CharacterComparator {
+    private int n;
 
-    private final int N;
-
+    /** OffByN constructor. */
     public OffByN(int N) {
-        this.N = N;
-    }
-
-    private int diff(int x, int y) {
-        return Math.abs(x - y);
+        this.n = N;
     }
 
     @Override
     public boolean equalChars(char x, char y) {
-        return diff(x, y) == N;
+        return Math.abs(x - y) == n;
     }
 }

@@ -13,7 +13,7 @@ public class TestOffByOne {
 
         Assert.assertFalse(offByOne.equalChars('a', 'e'));
         Assert.assertFalse(offByOne.equalChars('z', 'a'));
-        Assert.assertFalse(offByOne.equalChars('a', 'a'));
+        Assert.assertFalse(offByOne.equalChars('a', 'A'));
     }
 
 
@@ -21,7 +21,7 @@ public class TestOffByOne {
     @Test
     public void testOffByN() {
         Assert.assertTrue(offBy5.equalChars('a', 'f'));
-        Assert.assertTrue(offBy5.equalChars('f', 'a'));
+        Assert.assertFalse(offBy5.equalChars('F', 'a'));
         Assert.assertFalse(offBy5.equalChars('f', 'h'));
     }
     // Your tests go here.
