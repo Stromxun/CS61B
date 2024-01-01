@@ -33,5 +33,8 @@ public class TestPalindrome {
         assertTrue(palindrome.isPalindrome("flake", obo));
         assertTrue(palindrome.isPalindrome("a", obo));
         assertFalse(palindrome.isPalindrome("ccc", obo));
+        assertTrue(palindrome.isPalindrome("abcdedcb", obo));
+        assertFalse(palindrome.isPalindrome("AbcDedcb", obo));
+        assertFalse(palindrome.isPalindrome("aba", obo));
     }
 }
