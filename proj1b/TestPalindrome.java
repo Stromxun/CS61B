@@ -20,6 +20,7 @@ public class TestPalindrome {
     public void testIsPalindrome() {
         assertFalse(palindrome.isPalindrome("cat"));
         assertTrue(palindrome.isPalindrome(""));
+        assertTrue(palindrome.isPalindrome(null));
         assertFalse(palindrome.isPalindrome("apple"));
         assertTrue(palindrome.isPalindrome("txt"));
         assertTrue(palindrome.isPalindrome("enne"));
@@ -36,5 +37,7 @@ public class TestPalindrome {
         assertTrue(palindrome.isPalindrome("abcdedcb", obo));
         assertFalse(palindrome.isPalindrome("AbcDedcb", obo));
         assertFalse(palindrome.isPalindrome("aba", obo));
+        assertTrue(palindrome.isPalindrome("", obo));
+        assertTrue(palindrome.isPalindrome(null, obo));
     }
 }

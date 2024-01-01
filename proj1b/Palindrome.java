@@ -12,14 +12,13 @@ public class Palindrome {
     }
 
     public boolean isPalindrome(String word) {
-        if (word == null) {
+        if (word == null || word.length() <= 1) {
             return true;
         }
-
         Deque<Character> list = wordToDeque(word);
 
         while (list.size() > 1) {
-            if (!list.removeFirst().equals(list.removeLast())) {
+            if (!(list.removeFirst()).equals(list.removeLast())) {
                 return false;
             }
         }
@@ -27,7 +26,7 @@ public class Palindrome {
     }
 
     public boolean isPalindrome(String word, CharacterComparator  cc) {
-        if (word == null) {
+        if (word == null || word.length() <= 1) {
             return true;
         }
         Deque<Character> list = wordToDeque(word);
