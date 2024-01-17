@@ -15,35 +15,31 @@ public class TestArrayDequeGold {
         ArrayDequeSolution<Integer> expect = new ArrayDequeSolution<>();
         StudentArrayDeque<Integer> stu = new StudentArrayDeque<>();
 
-        final int bound = 10;
-
+        final int bound = 100;
+        Integer exp = 0, real = 0;
+        String log = "";
         for (int i = 0; i < bound; i++) {
-            double numberBetweenZeroAndOne = StdRandom.uniform();
-            if (numberBetweenZeroAndOne < 0.5) {
-                expect.addLast(i);
-                stu.addLast(i);
-            } else {
-                expect.addFirst(i);
-                stu.addFirst(i);
-            }
-        }
-
-        Integer exp, real;
-        String method;
-        for (int i = 0; i < bound; i++) {
-            double numberBetweenZeroAndOne = StdRandom.uniform();
-            if (numberBetweenZeroAndOne < 0.5) {
+            boolean empty = !isEmpty(expect, stu);
+            double numberBetweenZeroAndOne = empty ? StdRandom.uniform() : StdRandom.uniform(0.5, 1);
+            if (numberBetweenZeroAndOne < 0.25) {
                 exp = expect.removeLast();
                 real = stu.removeLast();
-                method = "removeLast()";
-            } else {
+                log = log + "removeLast()\n";
+            } else if (numberBetweenZeroAndOne < 0.5){
                 exp = expect.removeFirst();
                 real = stu.removeFirst();
-                method = "removeFirst";
+                log += "removeFirst()\n";
+            }else if (numberBetweenZeroAndOne < 0.75) {
+                expect.addLast(i);
+                stu.addLast(i);
+                log += "addLast(" + i +")\n";
+            }else {
+                expect.addFirst(i);
+                stu.addFirst(i);
+                log += "addFirst(" + i +")\n";
             }
-            assertEquals("Oh noooo!\nThis is bad Method:\n   " + method + "  actual:" + real
-                                    + " not equal to expect:" + exp + "!", exp, real);
-        }
+            assertEquals(log, exp, real);
 
+        }
     }
 }
