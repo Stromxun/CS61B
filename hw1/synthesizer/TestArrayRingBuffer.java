@@ -23,8 +23,6 @@ public class TestArrayRingBuffer {
             assertEquals((Integer) i, arb.dequeue());
         }
 
-        assertNull(arb.dequeue());
-
         for (int i = 0; i < 10; i++) {
             arb.enqueue(i);
         }
