@@ -55,7 +55,10 @@ public class GuitarString {
     /* Return the double at the front of the buffer. */
     public double sample() {
         //      Return the correct thing.
-        Double correct = buffer.peek();
-        return (correct == null ? 0 : correct);
+        try {
+            return buffer.peek();
+        } catch (RuntimeException e) {
+            return 0;
+        }
     }
 }
