@@ -1,10 +1,5 @@
 package synthesizer;
-import edu.princeton.cs.algs4.In;
-import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.Iterator;
-
 import static org.junit.Assert.*;
 
 /** Tests the ArrayRingBuffer class.
