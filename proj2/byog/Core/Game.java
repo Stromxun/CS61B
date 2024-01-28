@@ -4,17 +4,19 @@ import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Random;
 
 public class Game {
     TERenderer ter = new TERenderer();
+    Random rand;
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
 
-    private final int maxRoomSize = 20;
-
+    private final int maxRoomAmount = 20;
+    private int[][] dot;
     private final int MaxsizeRect = 6;
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
@@ -42,9 +44,12 @@ public class Game {
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
         initFrame(finalWorldFrame);
         long seed = seedParse(input);
-        rectangularGenerate(finalWorldFrame, seed);
+        rand = new Random(seed);
+        rectangularGenerate(finalWorldFrame);
+        generateRail(finalWorldFrame);
         connectRoom(finalWorldFrame);
         generateWall(finalWorldFrame);
+
         return finalWorldFrame;
     }
 
@@ -69,13 +74,7 @@ public class Game {
         return seed;
     }
 
-    private void fillRectangular(TETile[][] finalWorldFrame, int x, int y, Random rand) {
-        // random size of rect, but the low size is 2, maxsize is
-        int rectX = rand.nextInt(2, MaxsizeRect);
-        int rectY = rand.nextInt(2, MaxsizeRect);
-        int finalX = Math.min(x + rectX, WIDTH);
-        int finalY = Math.min(y + rectY, HEIGHT);
-
+    private void fillRectangular(TETile[][] finalWorldFrame, int x, int y, int finalX, int finalY) {
         for (int i = x; i < finalX; i++) {
             for (int j = y; j < finalY; j++) {
                 finalWorldFrame[i][j] = Tileset.FLOOR;
@@ -86,7 +85,7 @@ public class Game {
     final int[] X = {1, -1, 0, 0, -1, -1, 1, 1};
     final int[] Y = {0, 0, 1, -1, 1, -1, -1, 1};
 
-    final int aggregation = 6;
+    final int aggregation = 2;
 
     private boolean isWall(TETile[][] finalWorldFrame, int x, int y) {
         for (int i = 0; i < wallOrientation; i++) {
@@ -113,13 +112,26 @@ public class Game {
         }
     }
 
-    public void rectangularGenerate(TETile[][] finalWorldFrame, long seed) {
-        Random rand = new Random(seed);
-        for (int i = 0; i < maxRoomSize; i++) {
+    public void rectangularGenerate(TETile[][] finalWorldFrame) {
+        dot = new int[maxRoomAmount][2];
+        for (int i = 0; i < maxRoomAmount; i++) {
             int x = rand.nextInt(aggregation, WIDTH - aggregation);
             int y = rand.nextInt(aggregation,HEIGHT - aggregation);
-            fillRectangular(finalWorldFrame, x, y, rand);
+
+            // random size of rect, but the low size is 2, maxsize is MaxSizeRect
+            int rectX = rand.nextInt(2, MaxsizeRect);
+            int rectY = rand.nextInt(2, MaxsizeRect);
+            int finalX = Math.min(x + rectX, WIDTH);
+            int finalY = Math.min(y + rectY, HEIGHT);
+            dot[i][0] = rand.nextInt(x, finalX);
+            dot[i][1] = rand.nextInt(y, finalY);
+
+            fillRectangular(finalWorldFrame, x, y, finalX, finalY);
         }
+    }
+
+    private boolean isBorder(int x, int y) {
+        return x == WIDTH - 1 || x == 0 || y == HEIGHT - 1 || y == 0;
     }
 
     private void connectRoom(TETile[][] finalWorldFrame) {
@@ -127,6 +139,11 @@ public class Game {
             for (int j = 0; j < HEIGHT; j++) {
                 if(finalWorldFrame[i][j].equals(Tileset.NOTHING) && canConn(finalWorldFrame, i, j)) {
                     finalWorldFrame[i][j] = Tileset.FLOOR;
+                }
+
+                // fill not advisable floor
+                if (finalWorldFrame[i][j].equals(Tileset.FLOOR) && isBorder(i, j)) {
+                    finalWorldFrame[i][j] = Tileset.WALL;
                 }
             }
         }
@@ -142,7 +159,20 @@ public class Game {
 
     // generate rail connect all room
     private void generateRail(TETile[][] finalWorldFrame) {
-
+        for (int i = 1; i < maxRoomAmount; i++) {
+            algGenerateRail(finalWorldFrame, dot[i - 1][0], dot[i - 1][1], dot[i][0], dot[i][1]);
+        }
     }
 
+    private void algGenerateRail(TETile[][] finalWorldFrame, int sx, int sy, int ex, int ey) {
+        while (sx != ex || sy != ey) {
+            double rat = rand.nextDouble();
+            if ((rat < 0.5 && sx != ex) || sy == ey) {
+                sx = ((sx < ex) ? sx + 1 : sx - 1);
+            } else {
+                sy = ((sy < ey) ? sy + 1 : sy - 1);
+            }
+            finalWorldFrame[sx][sy] = Tileset.FLOOR;
+        }
+    }
 }
