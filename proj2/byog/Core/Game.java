@@ -2,6 +2,10 @@ package byog.Core;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
+import byog.TileEngine.Tileset;
+
+import java.util.Arrays;
+import java.util.Random;
 
 public class Game {
     TERenderer ter = new TERenderer();
@@ -9,6 +13,9 @@ public class Game {
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
 
+    private final int maxRoomSize = 20;
+
+    private final int MaxsizeRect = 6;
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
      */
@@ -32,7 +39,110 @@ public class Game {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
 
-        TETile[][] finalWorldFrame = null;
+        TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
+        initFrame(finalWorldFrame);
+        long seed = seedParse(input);
+        rectangularGenerate(finalWorldFrame, seed);
+        connectRoom(finalWorldFrame);
+        generateWall(finalWorldFrame);
         return finalWorldFrame;
     }
+
+    private void initFrame(TETile[][] finalWorldFrame) {
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
+                finalWorldFrame[i][j] = Tileset.NOTHING;
+            }
+        }
+    }
+
+    private boolean isDigital(Character ch) {
+        return ch >= '0' && ch <= '9';
+    }
+    private long seedParse(String input) {
+        long seed = 0;
+        for (Character ch : input.toCharArray()) {
+            if (isDigital(ch)) {
+                seed = seed * 10 + Long.parseLong(ch.toString());
+            }
+        }
+        return seed;
+    }
+
+    private void fillRectangular(TETile[][] finalWorldFrame, int x, int y, Random rand) {
+        // random size of rect, but the low size is 2, maxsize is
+        int rectX = rand.nextInt(2, MaxsizeRect);
+        int rectY = rand.nextInt(2, MaxsizeRect);
+        int finalX = Math.min(x + rectX, WIDTH);
+        int finalY = Math.min(y + rectY, HEIGHT);
+
+        for (int i = x; i < finalX; i++) {
+            for (int j = y; j < finalY; j++) {
+                finalWorldFrame[i][j] = Tileset.FLOOR;
+            }
+        }
+    }
+    final int wallOrientation = 8;
+    final int[] X = {1, -1, 0, 0, -1, -1, 1, 1};
+    final int[] Y = {0, 0, 1, -1, 1, -1, -1, 1};
+
+    final int aggregation = 6;
+
+    private boolean isWall(TETile[][] finalWorldFrame, int x, int y) {
+        for (int i = 0; i < wallOrientation; i++) {
+            int nowX = x + X[i];
+            int nowY = y + Y[i];
+            if (nowX < 0 || nowX >= WIDTH || nowY < 0 || nowY >= HEIGHT) {
+                continue;
+            }
+            if (finalWorldFrame[nowX][nowY].equals(Tileset.FLOOR)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private void generateWall(TETile[][] finalWorldFrame) {
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
+                if(finalWorldFrame[i][j].equals(Tileset.NOTHING) && isWall(finalWorldFrame, i, j)) {
+                    finalWorldFrame[i][j] = Tileset.WALL;
+                }
+            }
+        }
+    }
+
+    public void rectangularGenerate(TETile[][] finalWorldFrame, long seed) {
+        Random rand = new Random(seed);
+        for (int i = 0; i < maxRoomSize; i++) {
+            int x = rand.nextInt(aggregation, WIDTH - aggregation);
+            int y = rand.nextInt(aggregation,HEIGHT - aggregation);
+            fillRectangular(finalWorldFrame, x, y, rand);
+        }
+    }
+
+    private void connectRoom(TETile[][] finalWorldFrame) {
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
+                if(finalWorldFrame[i][j].equals(Tileset.NOTHING) && canConn(finalWorldFrame, i, j)) {
+                    finalWorldFrame[i][j] = Tileset.FLOOR;
+                }
+            }
+        }
+    }
+
+    private boolean canConn(TETile[][] finalWorldFrame, int i, int j) {
+        if (i - 1 < 0 || i + 1 > WIDTH || j - 1 < 0 || j + 1 > HEIGHT) {
+            return false;
+        }
+        return (finalWorldFrame[i - 1][j].equals(Tileset.FLOOR) && finalWorldFrame[i + 1][j].equals(Tileset.FLOOR)) ||
+               (finalWorldFrame[i][j - 1].equals(Tileset.FLOOR) && finalWorldFrame[i][j + 1].equals(Tileset.FLOOR));
+    }
+
+    // generate rail connect all room
+    private void generateRail(TETile[][] finalWorldFrame) {
+
+    }
+
 }
