@@ -16,6 +16,7 @@ public class Game {
     private final int maxRoomAmount = 20;
     private int[][] dot;
     private final int maxSizeRect = 6;
+
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
      */
@@ -99,11 +100,11 @@ public class Game {
         return false;
     }
 
-
     private void generateWall(TETile[][] finalWorldFrame) {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
-                if (finalWorldFrame[i][j].equals(Tileset.NOTHING) && isWall(finalWorldFrame, i, j)) {
+                if (finalWorldFrame[i][j].equals(Tileset.NOTHING)
+                    && isWall(finalWorldFrame, i, j)) {
                     finalWorldFrame[i][j] = Tileset.WALL;
                 }
             }
@@ -113,16 +114,16 @@ public class Game {
     public void rectangularGenerate(TETile[][] finalWorldFrame) {
         dot = new int[maxRoomAmount][2];
         for (int i = 0; i < maxRoomAmount; i++) {
-            int x = rand.nextInt(aggregation, WIDTH - aggregation);
-            int y = rand.nextInt(aggregation, HEIGHT - aggregation);
+            int x = RandomUtils.uniform(rand, aggregation, WIDTH - aggregation);
+            int y = RandomUtils.uniform(rand, aggregation, HEIGHT - aggregation);
 
             // random size of rect, but the low size is 2, maxsize is MaxSizeRect
-            int rectX = rand.nextInt(2, maxSizeRect);
-            int rectY = rand.nextInt(2, maxSizeRect);
+            int rectX = RandomUtils.uniform(rand, 2, maxSizeRect);
+            int rectY = RandomUtils.uniform(rand, 2, maxSizeRect);
             int finalX = Math.min(x + rectX, WIDTH);
             int finalY = Math.min(y + rectY, HEIGHT);
-            dot[i][0] = rand.nextInt(x, finalX);
-            dot[i][1] = rand.nextInt(y, finalY);
+            dot[i][0] = RandomUtils.uniform(rand, x, finalX);
+            dot[i][1] = RandomUtils.uniform(rand, y, finalY);
 
             fillRectangular(finalWorldFrame, x, y, finalX, finalY);
         }
@@ -135,7 +136,8 @@ public class Game {
     private void connectRoom(TETile[][] finalWorldFrame) {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
-                if (finalWorldFrame[i][j].equals(Tileset.NOTHING) && canConn(finalWorldFrame, i, j)) {
+                if (finalWorldFrame[i][j].equals(Tileset.NOTHING)
+                    && canConn(finalWorldFrame, i, j)) {
                     finalWorldFrame[i][j] = Tileset.FLOOR;
                 }
 
@@ -148,12 +150,14 @@ public class Game {
     }
 
     private boolean canConn(TETile[][] finalWorldFrame, int i, int j) {
-        if (i - 1 < 0 || i + 1 > WIDTH || j - 1 < 0 || j + 1 > HEIGHT) {
+        if (i - 1 < 0 || i + 1 >= WIDTH
+            || j - 1 < 0 || j + 1 >= HEIGHT) {
             return false;
         }
-        return (finalWorldFrame[i - 1][j].equals(Tileset.FLOOR) && finalWorldFrame[i + 1][j].equals(Tileset.FLOOR))
-            ||
-               (finalWorldFrame[i][j - 1].equals(Tileset.FLOOR) && finalWorldFrame[i][j + 1].equals(Tileset.FLOOR));
+        return (finalWorldFrame[i - 1][j].equals(Tileset.FLOOR)
+                && finalWorldFrame[i + 1][j].equals(Tileset.FLOOR))
+                || (finalWorldFrame[i][j - 1].equals(Tileset.FLOOR)
+                && finalWorldFrame[i][j + 1].equals(Tileset.FLOOR));
     }
 
     // generate rail connect all room
