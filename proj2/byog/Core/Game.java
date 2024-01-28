@@ -4,8 +4,6 @@ import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
-import java.awt.*;
-import java.util.Arrays;
 import java.util.Random;
 
 public class Game {
@@ -17,7 +15,7 @@ public class Game {
 
     private final int maxRoomAmount = 20;
     private int[][] dot;
-    private final int MaxsizeRect = 6;
+    private final int maxSizeRect = 6;
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
      */
@@ -37,7 +35,7 @@ public class Game {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] playWithInputString(String input) {
-        // TODO: Fill out this method to run the game using the input passed in,
+        // Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
 
@@ -68,7 +66,7 @@ public class Game {
         long seed = 0;
         for (Character ch : input.toCharArray()) {
             if (isDigital(ch)) {
-                seed = seed * 10 + Long.parseLong(ch.toString());
+                seed = seed * (2 * 5) + Long.parseLong(ch.toString());
             }
         }
         return seed;
@@ -105,7 +103,7 @@ public class Game {
     private void generateWall(TETile[][] finalWorldFrame) {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
-                if(finalWorldFrame[i][j].equals(Tileset.NOTHING) && isWall(finalWorldFrame, i, j)) {
+                if (finalWorldFrame[i][j].equals(Tileset.NOTHING) && isWall(finalWorldFrame, i, j)) {
                     finalWorldFrame[i][j] = Tileset.WALL;
                 }
             }
@@ -116,11 +114,11 @@ public class Game {
         dot = new int[maxRoomAmount][2];
         for (int i = 0; i < maxRoomAmount; i++) {
             int x = rand.nextInt(aggregation, WIDTH - aggregation);
-            int y = rand.nextInt(aggregation,HEIGHT - aggregation);
+            int y = rand.nextInt(aggregation, HEIGHT - aggregation);
 
             // random size of rect, but the low size is 2, maxsize is MaxSizeRect
-            int rectX = rand.nextInt(2, MaxsizeRect);
-            int rectY = rand.nextInt(2, MaxsizeRect);
+            int rectX = rand.nextInt(2, maxSizeRect);
+            int rectY = rand.nextInt(2, maxSizeRect);
             int finalX = Math.min(x + rectX, WIDTH);
             int finalY = Math.min(y + rectY, HEIGHT);
             dot[i][0] = rand.nextInt(x, finalX);
@@ -137,7 +135,7 @@ public class Game {
     private void connectRoom(TETile[][] finalWorldFrame) {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
-                if(finalWorldFrame[i][j].equals(Tileset.NOTHING) && canConn(finalWorldFrame, i, j)) {
+                if (finalWorldFrame[i][j].equals(Tileset.NOTHING) && canConn(finalWorldFrame, i, j)) {
                     finalWorldFrame[i][j] = Tileset.FLOOR;
                 }
 
@@ -153,7 +151,8 @@ public class Game {
         if (i - 1 < 0 || i + 1 > WIDTH || j - 1 < 0 || j + 1 > HEIGHT) {
             return false;
         }
-        return (finalWorldFrame[i - 1][j].equals(Tileset.FLOOR) && finalWorldFrame[i + 1][j].equals(Tileset.FLOOR)) ||
+        return (finalWorldFrame[i - 1][j].equals(Tileset.FLOOR) && finalWorldFrame[i + 1][j].equals(Tileset.FLOOR))
+            ||
                (finalWorldFrame[i][j - 1].equals(Tileset.FLOOR) && finalWorldFrame[i][j + 1].equals(Tileset.FLOOR));
     }
 
