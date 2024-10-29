@@ -2,6 +2,7 @@ package lab9;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Implementation of interface Map61B with BST as core data structure.
@@ -44,7 +45,17 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      *  or null if this map contains no mapping for the key.
      */
     private V getHelper(K key, Node p) {
-        throw new UnsupportedOperationException();
+        if (p == null) {
+            return null;
+        }
+        int sig = key.compareTo(p.key);
+        if (sig < 0) { // key < p.key
+            return getHelper(key, p.left);
+        } else if (sig > 0) { // key > p.key
+            return getHelper(key, p.right);
+        } else { // sig equal 0
+            return p.value;
+        }
     }
 
     /** Returns the value to which the specified key is mapped, or null if this
@@ -52,14 +63,26 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException();
+        return getHelper(key, this.root);
     }
 
     /** Returns a BSTMap rooted in p with (KEY, VALUE) added as a key-value mapping.
       * Or if p is null, it returns a one node BSTMap containing (KEY, VALUE).
      */
     private Node putHelper(K key, V value, Node p) {
-        throw new UnsupportedOperationException();
+        if (p == null) {
+            return new Node(key, value);
+        } else {
+            int tag = key.compareTo(p.key);
+            if (tag == 0) {
+                p.value = value;
+            } else if (tag < 0){
+                p.left = putHelper(key, value, p.left);
+            } else {
+                p.right = putHelper(key, value, p.right);
+            }
+            return p;
+        }
     }
 
     /** Inserts the key KEY
@@ -67,21 +90,38 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        this.root = putHelper(key, value, root);
     }
+
+    private int dfs(Node p) {
+        if (p == null) return 0;
+        else return (1 + dfs(p.left) + dfs(p.right));
+    }
+
 
     /* Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return dfs(this.root);
     }
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
 
+    private void dfs(Node p, Set<K> keys) {
+        if (p == null) {
+            return;
+        }
+        keys.add(p.key);
+        dfs(p.left, keys);
+        dfs(p.right, keys);
+    }
+
     /* Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        Set<K> keys = new TreeSet<>();
+        dfs(root, keys);
+        return keys;
     }
 
     /** Removes KEY from the tree if present
